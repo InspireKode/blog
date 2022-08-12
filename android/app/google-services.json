@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "243696280805",
+    "project_id": "inspire-blog-app",
+    "storage_bucket": "inspire-blog-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:243696280805:android:f5b1a69d8f3d831c9ea00c",
+        "android_client_info": {
+          "package_name": "com.example.my_first_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "243696280805-vbmca8dtoumrmjjkphfc98s22tssas7f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYAY8stSoYQA9OpY3eiFUp-aL9Ag1hNN8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "243696280805-vbmca8dtoumrmjjkphfc98s22tssas7f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
