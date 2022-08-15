@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_app/home_page.dart';
+import 'package:my_first_app/index.dart';
 import 'Sign_up.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -11,8 +12,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var emailCTR = TextEditingController();
-  var passwordCTR = TextEditingController();
+  var emailCTR = TextEditingController(text: "okoronkwo012@gmail.com");
+  var passwordCTR = TextEditingController(text: "okoronkwo012");
   var error_msg = "";
 
   final GlobalKey<FormState> _formKey = GlobalKey();
@@ -77,8 +78,8 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               labelText: "Email",
                               hintText: 'Enter your email here',
-                              prefixIcon:
-                                  const Icon(Icons.person, color: Colors.black)),
+                              prefixIcon: const Icon(Icons.person,
+                                  color: Colors.black)),
                           controller: emailCTR,
                         ),
                         const SizedBox(height: 10),
@@ -131,7 +132,10 @@ class _LoginPageState extends State<LoginPage> {
                           // padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 2000),
                           textColor: Colors.white,
                           color: Colors.red,
-                          child: const SizedBox(child: const Center(child: const Text("Sign In")), height: 20, width: 200),
+                          child: const SizedBox(
+                              child: const Center(child: const Text("Sign In")),
+                              height: 20,
+                              width: 200),
                         ),
                         const SizedBox(height: 10),
                         Row(
@@ -187,9 +191,8 @@ class _LoginPageState extends State<LoginPage> {
       if (user == null) {
         // print("user is currently not signed in");
       } else {
-
         Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => const HomePage()));
+            .push(MaterialPageRoute(builder: (context) => const IndexPage()));
 
         // FirebaseFirestore.instance
         //     .collection('user')

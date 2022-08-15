@@ -24,12 +24,15 @@ class _NewPostState extends State<NewPost> {
     xFile = await picker.pickImage(source: ImageSource.gallery);
     _image = File(xFile!.path);
     imagefile = _image;
+    error_msg = "";
+
     setState(() {});
   }
 
-  var titleCtr = TextEditingController();
-  var contentCtr = TextEditingController();
-  var authorCtr = TextEditingController();
+  var titleCtr = TextEditingController(text: "Some random title");
+  var contentCtr = TextEditingController(text: "Some random blog I'm making");
+  var authorCtr = TextEditingController(text: "Lucky");
+  final formKey = GlobalKey<FormState>();
   var imageUrl = "";
   var error_msg = "";
   bool isposting = false;
@@ -56,101 +59,110 @@ class _NewPostState extends State<NewPost> {
           child: Container(
             margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 12),
             child: Form(
+                key: formKey,
                 child: Column(
-              children: [
-                TextFormField(
-                  decoration: InputDecoration(labelText: "Blog Title"),
-                  controller: titleCtr,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: "Author"),
-                  controller: authorCtr,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: "Description"),
-                  controller: contentCtr,
-                  maxLines: 5,
-                  minLines: 5,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                // ignore: sized_box_for_whitespace
-                Container(
-                    margin: EdgeInsets.all(20.0),
-                    child: CircleAvatar(
-                      radius: 80.0,
-                      child: new IconButton(
-                              icon: Icon(Icons.add_a_photo, 
-                              size: 70.0,
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration(labelText: "Blog Title"),
+                      controller: titleCtr,
+                      validator: (value) {
+                        if (value!.length < 10) {
+                          return "Title must be greater than 10 chaN racters";
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(labelText: "Author"),
+                      controller: authorCtr,
+                      validator: (value) {
+                        if (value!.length < 2) {
+                          return "author name too short";
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(labelText: "Description"),
+                      controller: contentCtr,
+                      maxLines: 5,
+                      minLines: 5,
+                      validator: (value) {
+                        if (value!.trim().length < 10) {
+                          return "Content must be greater than 10 characters";
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    // ignore: sized_box_for_whitespace
+                    Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: CircleAvatar(
+                          radius: 80.0,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.add_a_photo,
+                              size: 40.0,
                               color: Colors.white,
-                              ),
-                              onPressed: (){
-                                pickImage();
-                              },
                             ),
-                    )
-                        
-                
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                error_msg != ''
-                    ? Container(
-                        child: Text(
-                          error_msg,
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      )
-                    : Container(),
-                Visibility(
-                  visible: isposting,
-                  child: CircularProgressIndicator(),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: MaterialButton(
-                    onPressed: () {
-                      setState(() {
-                        error_msg = "";
-                      });
-                      if (titleCtr.text.length < 10) {
-                        error_msg = "Title must be greater than 10 chaN racters";
-                      } else if (contentCtr.text.trim().length < 10) {
-                        error_msg =
-                            "Content must be greater than 10 characters";
-                      } else if (imagefile == null) {
-                        error_msg = "Please select an Image";
-                      }
-                      if (authorCtr.text.length < 2) {
-                        error_msg = "author name too short";
-                      } else {
-                        // uploadToFirebaseStorage();
-                      }
-                      setState(() {});
-                    },
-                    child: Text("Submit Blog"),
-                    textColor: Colors.white,
-                    color: Colors.red,
-                  ),
-                ),
-                TextButton(
-                    onPressed: () {
-                      goToHome();
-                    },
-                    child: Text("Cancel"))
-              ],
-            )),
+                            onPressed: () {
+                              pickImage();
+                            },
+                          ),
+                        )),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    error_msg != ''
+                        ? Container(
+                            child: Text(
+                              error_msg,
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          )
+                        : Container(),
+                    Visibility(
+                      visible: isposting,
+                      child: CircularProgressIndicator(),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: MaterialButton(
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            if (imagefile == null) {
+                              error_msg = "Please select an Image";
+                              setState(() {});
+                              return;
+                            }
+
+                            uploadToFirebaseStorage();
+                          }
+                        },
+                        child: Text("Submit Blog"),
+                        textColor: Colors.white,
+                        color: Colors.red,
+                      ),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          goToHome();
+                        },
+                        child: Text("Cancel"))
+                  ],
+                )),
           ),
         ),
       ),
@@ -158,38 +170,48 @@ class _NewPostState extends State<NewPost> {
   }
 
   void uploadToFirebaseStorage() async {
-    isposting = true;
-    setState(() {});
-    FirebaseStorage storage = FirebaseStorage.instance;
-    //
-    var reference = storage.ref().child("blog_images");
+    try {
+      isposting = true;
+      setState(() {});
+      FirebaseStorage storage = FirebaseStorage.instance;
+      //
+      var reference = storage.ref().child("blog_images");
 
-    var uploadTask =
-        reference.child(imagefile!.path.split('/').last).putFile(imagefile!);
-    TaskSnapshot snapshot = await uploadTask;
-    imageUrl = await snapshot.ref.getDownloadURL();
+      var uploadTask =
+          reference.child(imagefile!.path.split('/').last).putFile(imagefile!);
+      TaskSnapshot snapshot = await uploadTask;
+      imageUrl = await snapshot.ref.getDownloadURL();
 
-    submitPost();
-
-    // print(imageUrl);
+      await submitPost();
+    } catch (e) {
+      isposting = false;
+      setState(() {});
+      print(e);
+    }
   }
 
-  void submitPost() {
-    var blog_ref = FirebaseFirestore.instance.collection("blog");
-    blog_ref.add({
-      'title': titleCtr.text,
-      'content': contentCtr.text,
-      'imageurl': imageUrl,
-      'author': authorCtr.text,
-      'user_id': FirebaseAuth.instance.currentUser!.uid
-    }).then((value) {
-      setState(() {
-        isposting = false;
-        titleCtr.text = '';
-      });
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Successfull")));
-    }).catchError((error) => print("Failed to add: $error"));
+  Future<void> submitPost() async {
+    try {
+      var blog_ref = FirebaseFirestore.instance.collection("blog");
+      await blog_ref.add({
+        'title': titleCtr.text,
+        'content': contentCtr.text,
+        'imageurl': imageUrl,
+        'author': authorCtr.text,
+        'user_id': FirebaseAuth.instance.currentUser!.uid
+      }).then((value) {
+        setState(() {
+          isposting = false;
+          titleCtr.text = '';
+        });
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Successfull")));
+      }).catchError((error) => print("Failed to add: $error"));
+    } catch (e, trace) {
+      isposting = false;
+      setState(() {});
+      print(e);
+      print(trace);
+    }
   }
-  
 }
