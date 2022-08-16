@@ -2,6 +2,7 @@ import 'package:my_first_app/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
 
@@ -30,9 +31,18 @@ class _ProfileState extends State<Profile> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const SizedBox(height: 20),
-                        Image.asset("images/avatar.png",
-                            width: MediaQuery.of(context).size.width),
+                    const  SizedBox(height: 20.0),
+                       const  CircleAvatar(
+                        radius: 70,
+                  backgroundColor: Colors.red,
+                  child: Icon(
+                    Icons.person,
+                    color: Colors.white,
+                    size: 100,
+                  ),
+
+                       ),
+                   const    SizedBox(height: 10.0),
                         Text("Email:" + currentUser!.email!)
                       ],
                     ),

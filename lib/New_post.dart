@@ -31,7 +31,7 @@ class _NewPostState extends State<NewPost> {
 
   var titleCtr = TextEditingController(text: "Some random title");
   var contentCtr = TextEditingController(text: "Some random blog I'm making");
-  var authorCtr = TextEditingController(text: "Lucky");
+  var authorCtr = TextEditingController(text:" E- inspire ");
   final formKey = GlobalKey<FormState>();
   var imageUrl = "";
   var error_msg = "";
@@ -67,7 +67,7 @@ class _NewPostState extends State<NewPost> {
                       controller: titleCtr,
                       validator: (value) {
                         if (value!.length < 10) {
-                          return "Title must be greater than 10 chaN racters";
+                          return "Title must be greater than 10 characters";
                         }
                         return null;
                       },
@@ -197,6 +197,7 @@ class _NewPostState extends State<NewPost> {
         'title': titleCtr.text,
         'content': contentCtr.text,
         'imageurl': imageUrl,
+        'likers': [],
         'author': authorCtr.text,
         'user_id': FirebaseAuth.instance.currentUser!.uid
       }).then((value) {

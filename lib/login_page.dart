@@ -173,26 +173,39 @@ class _LoginPageState extends State<LoginPage> {
 
   void signIn() async {
     try {
-      getUsername();
+      // getUsername();
+       
 
-      UserCredential userCredential = await FirebaseAuth.instance
+
+    final  UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(
               email: emailCTR.text, password: passwordCTR.text);
+
+              final User = userCredential.user;
+              
+              if (userCredential.user == null) {  print ('Log in failed ');
+        // print("user is currently not signed in");
+      } else {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => const IndexPage()));
+      }
+
     } on FirebaseAuthException catch (e) {
       setState(() {
         error_msg = e.code;
         print(error_msg);
       });
+      
     }
   }
 
-  void getUsername() {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-        // print("user is currently not signed in");
-      } else {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => const IndexPage()));
+  // void getUsername() {
+  //   FirebaseAuth.instance.authStateChanges().listen((User? user) {
+  //     if (user == null) {
+  //       // print("user is currently not signed in");
+  //     } else {
+  //       Navigator.of(context)
+  //           .push(MaterialPageRoute(builder: (context) => const IndexPage()));
 
         // FirebaseFirestore.instance
         //     .collection('user')
@@ -208,6 +221,4 @@ class _LoginPageState extends State<LoginPage> {
         //   print(e);
         // });
       }
-    });
-  }
-}
+    

@@ -27,7 +27,7 @@ class _IndexPageState extends State<IndexPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Blog App'),
         centerTitle: true,
@@ -114,7 +114,7 @@ class _IndexPageState extends State<IndexPage> {
         child: Icon(Icons.add),
       ),
       bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
+        shape:  const CircularNotchedRectangle(),
         notchMargin: 10,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
